@@ -6,7 +6,7 @@ from uuid import uuid4, UUID as UUIDType
 from sqlalchemy import String, UUID
 from pydantic import BaseModel, Field
 from http import HTTPStatus
-
+from fastapi.middleware.cors import CORSMiddleware
 
 
 engine = create_engine("sqlite:///livros.db")
@@ -41,6 +41,12 @@ class LivrosSaida(LivrosEntrada):
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(engine)
 
@@ -93,3 +99,4 @@ def deletar_livros( id_livro: UUIDType,db: Session = Depends(get_db)):
     }
 
     
+
